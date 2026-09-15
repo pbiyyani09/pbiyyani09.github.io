@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MedMemGraph — Case Study · Prashanth Biyyani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b12;--card:#0f1622;--border:#1a2433;--text:#c7d2e0;--bright:#eaf0f8;--muted:#788699;--accent:#5eead4;--head:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--head);color:var(--bright);line-height:1.15;letter-spacing:-.02em}
+.top{border-bottom:1px solid var(--border)}
+.top .wrap{height:60px;display:flex;align-items:center}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)}.back:hover{color:var(--bright);text-decoration:none}
+header{padding:44px 0 10px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent)}
+h1{font-size:clamp(30px,5vw,44px);margin:14px 0 10px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lede{font-size:18px;color:var(--text);margin:18px 0 4px}
+section{padding:26px 0;border-top:1px solid var(--border);margin-top:24px}
+h2{font-size:13px;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px}
+p{color:var(--text);margin-bottom:14px} b{color:var(--bright);font-weight:600}
+ul{color:var(--text);padding-left:20px;margin-bottom:12px} li{margin:6px 0}
+.note{border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14.5px;margin:14px 0}
+.note b{color:var(--accent)}
+.stack{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.stack span{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
+.links{display:flex;gap:14px;margin-top:20px}
+.links a{font-family:var(--mono);font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><a class="back" href="../index.html">← back to work</a></div></div>
+<div class="wrap">
+  <header>
+    <span class="badge">solo project</span>
+    <h1>MedMemGraph</h1>
+    <div class="meta"><span>Role: Sole engineer</span><span>Python · Property Graph · Clinical NLP</span></div>
+    <p class="lede">Graph-native longitudinal memory for clinical AI agents — it remembers a patient across admissions, answers by walking a fact graph, and can always show why it believes an answer.</p>
+    <div class="stack"><span>Python</span><span>HydraDB (graph)</span><span>Property graph</span><span>Clinical NLP</span></div>
+  </header>
+
+  <section>
+    <h2>Context</h2>
+    <p>Built for <b>HackHydra — Track 03 (Memory &amp; Context Retrieval)</b>. A clinical assistant that spans many hospital admissions needs real memory: it has to recall what happened last visit, compare across visits, and — critically in a medical setting — never make something up.</p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>The default pattern, chunk-similarity RAG, ranks passages by embedding distance. That loses <b>provenance</b> (you can't trace an answer back to the fact that justified it) and it <b>fails silently on absence</b> — ask about something the record doesn't contain and a similarity search still returns the "closest" chunk, inviting a confident, wrong answer.</p>
+  </section>
+
+  <section>
+    <h2>Approach</h2>
+    <ul>
+      <li><b>Facts as versioned graph nodes.</b> Multi-admission conversation histories are parsed into clinical facts stored as versioned nodes in a property graph, rather than flattened into text chunks.</li>
+      <li><b>Retrieval by traversal, not ranking.</b> Questions are answered by walking weighted paths through the graph (HydraDB <span class="stack" style="display:inline"><span>SPpaths</span></span> / <code>SSpaths</code> / <code>MSpaths</code> path-enumeration), so a "why do you believe this?" query returns the actual provenance trail it traversed.</li>
+      <li><b>Structural absence detection.</b> When no supporting path exists, the system <b>declines to answer</b> instead of guessing — turning "I don't have that" into a first-class, structural outcome.</li>
+      <li><b>Cross-admission reasoning.</b> Multi-hop walks synthesize comparisons across visits ("how has this changed since last admission?") that a single chunk lookup can't express.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Results &amp; what I learned</h2>
+    <ul>
+      <li>A working end-to-end prototype: ingest histories → build the fact graph → answer questions with a <b>provenance path attached</b> and an explicit refusal path for unanswerable ones.</li>
+      <li><i>Learned:</i> for high-stakes retrieval, representing knowledge as a traversable graph buys you two things vector similarity can't — <b>explainability</b> (the path is the citation) and <b>honest absence</b> (no path ⇒ no answer).</li>
+    </ul>
+    <div class="note"><b>Honest scope:</b> this is a hackathon prototype (~10 commits, Track 03) built on the <b>HydraDB OSS</b> graph engine (an AGPL-3.0 dependency) — a demonstration of the graph-memory approach, not a deployed clinical system. Retrieval quality is shown by construction (paths + refusals); I have not yet benchmarked it head-to-head against a vector-RAG baseline, which is the honest next step.</div>
+  </section>
+
+  <div class="links">
+    <a href="https://github.com/pbiyyani09/Hack_Hydra" target="_blank" rel="noopener">View on GitHub ↗</a>
+    <a href="../index.html">← Other projects</a>
+  </div>
+</div>
+<footer>Prashanth Biyyani · Case study</footer>
+</body>
+</html>

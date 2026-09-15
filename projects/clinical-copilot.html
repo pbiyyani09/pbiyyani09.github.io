@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governed Clinical Copilot — Case Study · Prashanth Biyyani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b12;--card:#0f1622;--border:#1a2433;--text:#c7d2e0;--bright:#eaf0f8;--muted:#788699;--accent:#5eead4;--head:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--head);color:var(--bright);line-height:1.15;letter-spacing:-.02em}
+.top{border-bottom:1px solid var(--border)}
+.top .wrap{height:60px;display:flex;align-items:center}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)}.back:hover{color:var(--bright);text-decoration:none}
+header{padding:44px 0 10px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent)}
+h1{font-size:clamp(30px,5vw,44px);margin:14px 0 10px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lede{font-size:18px;color:var(--text);margin:18px 0 4px}
+section{padding:26px 0;border-top:1px solid var(--border);margin-top:24px}
+h2{font-size:13px;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px}
+p{color:var(--text);margin-bottom:14px} b{color:var(--bright);font-weight:600}
+ul{color:var(--text);padding-left:20px;margin-bottom:12px} li{margin:6px 0}
+.note{border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14.5px;margin:14px 0}
+.note b{color:var(--accent)}
+.stack{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.stack span{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
+.links{display:flex;gap:14px;margin-top:20px}
+.links a{font-family:var(--mono);font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><a class="back" href="../index.html">← back to work</a></div></div>
+<div class="wrap">
+  <header>
+    <span class="badge">solo project</span>
+    <h1>Governed Clinical Copilot</h1>
+    <div class="meta"><span>Role: Sole engineer</span><span>Python · PyTorch · sqlglot · LangGraph</span></div>
+    <p class="lede">A self-hostable natural-language→SQL analytics agent over de-identified clinical (MIMIC-IV) data — built <b>governance-first</b>, so it refuses what it shouldn't answer instead of guessing.</p>
+    <div class="stack"><span>Python</span><span>PyTorch</span><span>sqlglot (AST)</span><span>LangGraph</span><span>Transformers</span><span>QLoRA / ORPO</span></div>
+  </header>
+
+  <section>
+    <h2>Context</h2>
+    <p>Clinicians and analysts want to ask questions of EHR data in plain English. But an LLM that writes and runs SQL over health data is genuinely dangerous: it can issue destructive statements, read protected-health-information (PHI) columns, return re-identifiable small cells, or — worst — answer confidently when it should say "I can't."</p>
+  </section>
+
+  <section>
+    <h2>Problem</h2>
+    <p>The hard part wasn't SQL accuracy — it was <b>trustworthiness under adversarial input</b>. The system had to enforce read-only access, block PHI, suppress small-cell results, and <b>know when to abstain</b>, all before a query ever touches the database.</p>
+  </section>
+
+  <section>
+    <h2>Approach</h2>
+    <ul>
+      <li><b>A 5-layer guardrail stack.</b> Three layers are <b>AST-based</b> (parsed with sqlglot), which is the real security boundary: (1) read-only / single-statement enforcement that walks the tree for hidden DDL/DML even inside sub-queries and CTEs; (2) a table+column allowlist that resolves CTE names and aliases before checking; (3) a hard PHI-column block. On top: (4) post-execution <b>k-anonymity</b> small-cell suppression (k=11, NHS standard), and (5) a heuristic prompt-injection screen on the NL input.</li>
+      <li><b>Fine-tuning the SQL model.</b> I ran a full SFT → DPO → ORPO → GRPO arc on a 7B code model with QLoRA, learning to abstain on unanswerable questions. When GRPO collapsed (zero within-group reward variance — SQL generation is bimodal), I diagnosed it and pivoted to ORPO. Separately I fine-tuned OmniSQL-7B (SFT + ORPO).</li>
+      <li><b>An evaluation harness I could trust.</b> A ~1,200-line harness mirroring the official EHRSQL-2024 scorer (execution accuracy + a reliability score that rewards correct abstention and penalizes hallucinated SQL), with execution-guided repair and self-consistency voting.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Results &amp; what I learned</h2>
+    <ul>
+      <li>On my own evaluation, the OmniSQL-7B (SFT+ORPO) model reached <b>RS(10) = 0.873</b> on the official 1,167-question test split — matching/exceeding the public leaderboard winner <i>in my eval</i>.</li>
+      <li>A <b>68-case adversarial suite</b> for the guardrails (DDL-inside-a-CTE, PHI-in-a-subquery, injection strings, and more).</li>
+      <li>The most valuable moment was <b>catching a bug in my own scoring code</b> — it was counting two different <i>failing</i> queries as a match, inflating accuracy. I fixed it and added a locking regression test. Distrusting your own green metrics is the real skill.</li>
+    </ul>
+    <div class="note"><b>Honest scope:</b> the 0.873 is my own evaluation, not independently verified against the gated leaderboard; and the served inference path uses Hugging&nbsp;Face + bitsandbytes (a vLLM/AWQ path was planned, not shipped). The guardrail rigor, the diagnosed GRPO failure, and the self-caught scoring bug are the parts I stand behind fully.</div>
+  </section>
+
+  <div class="links">
+    <a href="https://github.com/pbiyyani09/Governed-Clinical-Analytics-Copilot" target="_blank" rel="noopener">View on GitHub ↗</a>
+    <a href="../index.html">← Other projects</a>
+  </div>
+</div>
+<footer>Prashanth Biyyani · Case study</footer>
+</body>
+</html>

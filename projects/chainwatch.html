@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChainWatch — Case Study · Prashanth Biyyani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b12;--card:#0f1622;--border:#1a2433;--text:#c7d2e0;--bright:#eaf0f8;--muted:#788699;--accent:#5eead4;--accent2:#7dd3fc;--head:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--head);color:var(--bright);line-height:1.15;letter-spacing:-.02em}
+.top{border-bottom:1px solid var(--border)}
+.top .wrap{height:60px;display:flex;align-items:center}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)}.back:hover{color:var(--bright);text-decoration:none}
+header{padding:44px 0 10px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent2) 40%,transparent);color:var(--accent2)}
+h1{font-size:clamp(30px,5vw,44px);margin:14px 0 10px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lede{font-size:18px;color:var(--text);margin:18px 0 4px}
+section{padding:26px 0;border-top:1px solid var(--border);margin-top:24px}
+h2{font-size:13px;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px}
+p{color:var(--text);margin-bottom:14px} b{color:var(--bright);font-weight:600}
+ul{color:var(--text);padding-left:20px;margin-bottom:12px} li{margin:6px 0}
+.note{border-left:2px solid var(--accent2);background:color-mix(in srgb,var(--accent2) 6%,transparent);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14.5px;margin:14px 0}
+.note b{color:var(--accent2)}
+.stack{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.stack span{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
+.links{display:flex;gap:14px;margin-top:20px}
+.links a{font-family:var(--mono);font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><a class="back" href="../index.html">← back to work</a></div></div>
+<div class="wrap">
+  <header>
+    <span class="badge">co-built · my parts labeled</span>
+    <h1>ChainWatch</h1>
+    <div class="meta"><span>Role: Data &amp; platform engineer</span><span>Python · Gemini · Streamlit</span></div>
+    <p class="lede">A real-time early-warning system for supply-chain disruptions: monitor global signals, map them to a supplier network, score risk with an LLM, and surface actionable briefs.</p>
+    <div class="stack"><span>Python</span><span>Gemini</span><span>Streamlit</span><span>SQLAlchemy</span><span>Public data APIs</span></div>
+  </header>
+
+  <section>
+    <h2>Context</h2>
+    <p>A 5-day capstone, then extended: a multi-agent pipeline that watches the world for supply-chain-relevant events (port strikes, floods, earthquakes, tariffs), scores how each threatens a company's suppliers, and writes procurement briefs.</p>
+  </section>
+
+  <section>
+    <h2>What I owned</h2>
+    <ul>
+      <li><b>Data ingestion — 7 live sources.</b> Resilient fetchers for GDELT, NewsAPI, NOAA, USGS, Open-Meteo, and FRED/Yahoo, each with <b>graceful degradation</b> (fail-open to empty, explicit demo fallbacks) so no single API outage takes the pipeline down.</li>
+      <li><b>LLM cost control.</b> A keyword pre-filter that drops irrelevant events before they ever reach the model, plus batching multiple suppliers into a single scoring call — the difference between a demo and a system you can afford to run.</li>
+      <li><b>The forecaster and the 10-tab Streamlit dashboard</b> — risk map, alerts, timeline, forecasts, signals, and more, backed by a SQLAlchemy schema.</li>
+    </ul>
+    <div class="note"><b>Honest attribution:</b> this was co-built. My collaborator authored the LangGraph orchestration, the RAG stack, and the guardrails/eval layer. I owned the ingestion, cost controls, forecaster, and dashboard above — that's the part I speak to.</div>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <ul>
+      <li>A functional end-to-end pipeline (signal → risk score → brief → alert) running on real public data feeds; the project's full <b>66-test suite passes</b> (across both my modules and my collaborator's).</li>
+      <li>Cost-aware by design — the keyword filter and batching cut LLM calls substantially before scoring.</li>
+      <li><i>Learned:</i> integrating many messy real-world APIs teaches you that resilience (timeouts, fallbacks, honest "demo" flags) matters more than the happy path. Some delivery integrations (Slack/Gmail alerts) are coded but were never run live end-to-end.</li>
+    </ul>
+  </section>
+
+  <div class="links">
+    <a href="https://github.com/pbiyyani09/Supply_Chain_Disruption_Agentic_Approach" target="_blank" rel="noopener">View on GitHub ↗</a>
+    <a href="../index.html">← Other projects</a>
+  </div>
+</div>
+<footer>Prashanth Biyyani · Case study</footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cash-Flow Copilot — Case Study · Prashanth Biyyani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b12;--card:#0f1622;--border:#1a2433;--text:#c7d2e0;--bright:#eaf0f8;--muted:#788699;--accent:#5eead4;--accent2:#7dd3fc;--head:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--head);color:var(--bright);line-height:1.15;letter-spacing:-.02em}
+.top{border-bottom:1px solid var(--border)}
+.top .wrap{height:60px;display:flex;align-items:center}
+.back{font-family:var(--mono);font-size:13px;color:var(--muted)}.back:hover{color:var(--bright);text-decoration:none}
+header{padding:44px 0 10px}
+.badge{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent2) 40%,transparent);color:var(--accent2)}
+h1{font-size:clamp(30px,5vw,44px);margin:14px 0 10px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:6px}
+.lede{font-size:18px;color:var(--text);margin:18px 0 4px}
+section{padding:26px 0;border-top:1px solid var(--border);margin-top:24px}
+h2{font-size:13px;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px}
+p{color:var(--text);margin-bottom:14px} b{color:var(--bright);font-weight:600}
+ul{color:var(--text);padding-left:20px;margin-bottom:12px} li{margin:6px 0}
+.note{border-left:2px solid var(--accent2);background:color-mix(in srgb,var(--accent2) 6%,transparent);padding:12px 16px;border-radius:0 8px 8px 0;font-size:14.5px;margin:14px 0}
+.note b{color:var(--accent2)}
+.stack{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.stack span{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
+.links{display:flex;gap:14px;margin-top:20px}
+.links a{font-family:var(--mono);font-size:13px;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text)}
+.links a:hover{border-color:var(--accent);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:34px;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><a class="back" href="../index.html">← back to work</a></div></div>
+<div class="wrap">
+  <header>
+    <span class="badge">co-built · my parts labeled</span>
+    <h1>Cash-Flow Copilot</h1>
+    <div class="meta"><span>Role: Grounding, evals &amp; hardening</span><span>Python · ADK · MCP · Gemini</span></div>
+    <p class="lede">An agentic "CFO-in-a-box" for small businesses: ask plain-English questions about your money and get answers pulled straight from the ledger — a 13-week forecast, a runway alert, a CFO-style narrative — with a guard that structurally refuses to invent numbers.</p>
+    <div class="stack"><span>Python</span><span>Google ADK</span><span>MCP servers</span><span>Gemini</span><span>Hybrid RAG</span></div>
+  </header>
+
+  <section>
+    <h2>Context</h2>
+    <p>Built for the <b>Google 5-Day AI Agents Intensive</b> capstone. Small-business owners want plain-English answers about cash flow — runway, forecasts, "can I make payroll?" — grounded in their own ledger rather than a chatbot's imagination.</p>
+  </section>
+
+  <section>
+    <h2>What I owned</h2>
+    <ul>
+      <li><b>The numeric-provenance guard.</b> A <b>deterministic verification layer</b> — every figure in an answer must trace back to a real ledger row, or it doesn't ship. The anti-hallucination guarantee is structural, not a "please be accurate" prompt.</li>
+      <li><b>The evaluation harness.</b> A question catalog of <b>~430 questions</b> (194 run live end-to-end, 22 curated into fixed regression checks) so grounding didn't silently regress as the agent changed.</li>
+      <li><b>Retrieval hardening &amp; performance.</b> A measured <b>~7.8× embedding speedup</b> on the retrieval path (reranker gains estimated via a proxy benchmark, which I flag as a proxy rather than a live number).</li>
+    </ul>
+    <div class="note"><b>Honest attribution:</b> this was co-built. My collaborator owned the <b>agent architecture</b> — the ADK orchestration, MCP servers, and retrieval design. I owned the <b>numeric-provenance guard, the eval harness, and the hardening/perf</b> above. By commit count the split was roughly even; by code volume my share was smaller — so I speak to the grounding-and-evaluation half, not the whole system.</div>
+  </section>
+
+  <section>
+    <h2>Results &amp; what I learned</h2>
+    <ul>
+      <li>A working agent that answers ledger questions with figures <b>verified against source rows</b> — the model proposes, the guard disposes.</li>
+      <li><i>Learned:</i> for anything numeric, <b>deterministic verification beats prompt-based promises</b>. "Don't hallucinate" is a wish; checking each number against the ledger is a guarantee — and a regression suite is what keeps that guarantee true over time.</li>
+    </ul>
+  </section>
+
+  <div class="links">
+    <a href="https://github.com/venkat1596/smb-cash-flow-copilot" target="_blank" rel="noopener">View on GitHub ↗</a>
+    <a href="../index.html">← Other projects</a>
+  </div>
+</div>
+<footer>Prashanth Biyyani · Case study</footer>
+</body>
+</html>

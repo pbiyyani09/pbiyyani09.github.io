@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prashanth Biyyani — Résumé</title>
+<style>
+  /* ATS-safe: single column, standard fonts, real selectable text, no tables/columns/graphics. */
+  :root{--ink:#111;--muted:#444;--rule:#bbb;--fill:#fff3cd}
+  *{box-sizing:border-box}
+  body{margin:0;background:#525659;color:var(--ink)}
+  .page{max-width:8.5in;min-height:11in;margin:16px auto;background:#fff;padding:0.5in 0.6in;
+    font:10.5pt/1.35 "Calibri","Segoe UI",Arial,Helvetica,sans-serif}
+  a{color:inherit;text-decoration:none}
+  h1{font-size:22pt;margin:0;letter-spacing:.3px}
+  .contact{font-size:9.5pt;color:var(--muted);margin:3px 0 2px}
+  .contact a{text-decoration:underline}
+  h2{font-size:11pt;text-transform:uppercase;letter-spacing:1px;margin:13px 0 2px;padding-bottom:2px;border-bottom:1.5px solid var(--ink)}
+  .role{display:flex;justify-content:space-between;gap:10px;margin-top:7px}
+  .role b{font-size:10.5pt} .role .meta{color:var(--muted);font-size:9.5pt;white-space:nowrap}
+  .sub{font-style:italic;color:var(--muted);font-size:9.5pt;margin:0}
+  ul{margin:3px 0 0;padding-left:17px} li{margin:2px 0}
+  .skills p{margin:2px 0}
+  .fill{background:var(--fill);padding:0 3px;border-radius:3px;font-style:italic}
+  .toolbar{max-width:8.5in;margin:8px auto 0;color:#ddd;font:12px/1.5 system-ui;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .toolbar b{color:#fff}
+  @media print{
+    body{background:#fff} .toolbar{display:none} .page{margin:0;box-shadow:none;padding:0.45in 0.55in}
+    .fill{background:none;border:1px dashed #999}
+    a{text-decoration:none}
+    @page{margin:0.4in}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <b>To export:</b> replace every <span style="background:#fff3cd;color:#111;padding:0 3px;border-radius:3px">highlighted</span> placeholder, then <b>Ctrl/Cmd-P → Save as PDF</b> (margins: Default, Background graphics OFF). Keep it to 1 page if you can, 2 max.
+</div>
+
+<div class="page">
+  <h1>PRASHANTH BIYYANI</h1>
+  <div class="contact">
+    Software Engineer · Tallahassee, FL (open to relocation) ·
+    <a href="mailto:prashanthreddybiyyani3@gmail.com">prashanthreddybiyyani3@gmail.com</a>
+  </div>
+  <div class="contact">
+    <a href="https://github.com/pbiyyani09">github.com/pbiyyani09</a> ·
+    <a href="https://www.linkedin.com/in/prashanth-biyyani-06599b232">linkedin.com/in/prashanth-biyyani-06599b232</a> ·
+    <a href="https://pbiyyani09.github.io">pbiyyani09.github.io</a>
+  </div>
+
+  <h2>Summary</h2>
+  <div>
+    Full-stack Software Engineer (4+ yrs) shipping and operating production cloud-native systems —
+    Node.js/Express &amp; Java/Spring Boot microservices on Kubernetes, Angular/React front-ends — now building
+    and evaluating LLM systems in production (RAG, multi-agent orchestration, LoRA/QLoRA fine-tuning,
+    execution-accuracy eval harnesses). Bridges backend/infra ownership with applied AI engineering.
+  </div>
+
+  <h2>Technical Skills</h2>
+  <div class="skills">
+    <p><b>Languages:</b> Python, JavaScript/TypeScript, Java, SQL, Bash</p>
+    <p><b>Backend &amp; APIs:</b> Node.js, Express, Spring Boot, FastAPI, Flask, Django, REST, microservices, middleware</p>
+    <p><b>Frontend:</b> Angular, React, RxJS/NgRx, HTML5, CSS</p>
+    <p><b>Cloud &amp; DevOps:</b> Kubernetes, Docker, Terraform, Jenkins, CI/CD, AWS (EC2, S3, RDS, Lambda, IAM, VPC, SNS/SQS, Redshift, CloudWatch), IBM Cloud</p>
+    <p><b>Data:</b> PostgreSQL, MySQL, Oracle, Snowflake, Redshift, MongoDB, Elasticsearch, Airflow, PySpark, Pandas, ETL</p>
+    <p><b>AI/ML:</b> LLM application development, RAG, multi-agent (LangGraph), fine-tuning (LoRA/QLoRA/DPO/ORPO), evals &amp; guardrails, PyTorch, MCP</p>
+    <p><b>Tools:</b> Git, Postman, Swagger, Power BI, Tableau</p>
+  </div>
+
+  <h2>Experience</h2>
+
+  <div class="role"><b>AI Developer / Software Engineer — Florida Department of Health</b><span class="meta">Oct 2023 – Present · Tallahassee, FL</span></div>
+  <p class="sub">Own ELI end-to-end — a production conversational-AI assistant deployed across Florida's medical-board sites</p>
+  <ul>
+    <li><b>Own ELI end-to-end</b> — idea, design, deployment, and maintenance — the department's conversational-AI assistant embedded across Florida's medical-board public sites (flhealthsource.gov/boards); built the backend and orchestration in Node.js/Express (resilient REST APIs, custom async middleware) serving <b>100,000+ monthly users</b>.</li>
+    <li>Sustained <b>99.9%+ uptime</b> on Kubernetes (IBM Cloud) by owning rollout strategy, resource-limit tuning, IAM policy, and monitoring for the ELI platform.</li>
+    <li>Built Python ETL and analytics pipelines processing <b>~1–2M records/month</b> (10–20 per user across 100K+ users) into a downstream PostgreSQL store, powering near-real-time operational dashboards for department leadership.</li>
+    <li>Built and maintained the ELI chatbot and Conversational Insights front-ends in Angular/React, integrating with backend services over REST for a responsive real-time experience.</li>
+    <li>Harden security with IBM Cloud authentication, IAM policies, and access controls to protect sensitive health data and support compliance.</li>
+  </ul>
+
+  <div class="role"><b>Software Engineer — UnitedHealth Group / Optum</b><span class="meta">Feb 2022 – Sep 2023 · Remote</span></div>
+  <p class="sub">Backend microservices &amp; full-stack (MEAN) for healthcare applications</p>
+  <ul>
+    <li>Built cloud microservices in Java/Spring Boot (Spring MVC, centralized config server, client-side load balancing), centralizing configuration to speed new-service onboarding.</li>
+    <li>Developed MEAN-stack applications (Express, Angular 7, Node.js) with reusable components, RxJS Observables, and @NgRx state management for complex multi-step forms.</li>
+    <li>Designed REST APIs (Node/Express) serving JSON to Angular front-ends and integrated user-facing components with server-side services.</li>
+  </ul>
+
+  <h2>Selected Projects</h2>
+  <ul>
+    <li><b>Governed Clinical-Analytics Copilot</b> (solo) — Self-hostable NL→SQL clinical-analytics agent over EHR data. <i>Python, PyTorch, sqlglot, LangGraph.</i> <a href="https://github.com/pbiyyani09/Governed-Clinical-Analytics-Copilot" style="text-decoration:underline">GitHub</a>
+      <ul>
+        <li>Designed a 5-layer AST-based SQL guardrail stack (sqlglot) blocking destructive queries, PHI columns, and small-cell (k-anonymity) results.</li>
+        <li>Fine-tuned a 7B code model with QLoRA + ORPO for NL→SQL, with learned abstention on unanswerable questions.</li>
+        <li>Built a 1,200-line evaluation harness measuring execution accuracy and answer/abstain reliability.</li>
+      </ul></li>
+    <li><b>ChainWatch — Supply-Chain Risk Monitor</b> (co-built) — Owned the data ingestion (7 live sources: GDELT, NOAA, USGS, FRED, …), LLM-cost controls (keyword pre-filtering, request batching), and the 10-tab dashboard. <i>Python, Gemini, Streamlit.</i> <a href="https://github.com/pbiyyani09/Supply_Chain_Disruption_Agentic_Approach" style="text-decoration:underline">GitHub</a></li>
+    <li><b>Building-Damage Segmentation</b> (solo) — PyTorch semantic segmentation (attention U-Net with CBAM/ASPP) on 11-class UAV disaster imagery; compound CE/Focal/Dice loss for class imbalance. <i>PyTorch.</i> <a href="https://github.com/pbiyyani09/BuildingDisasterSegmentation" style="text-decoration:underline">GitHub</a></li>
+  </ul>
+
+  <h2>Hackathons &amp; Competitions</h2>
+  <ul>
+    <li><b>HackHydra 2026</b> — Track 03 (Memory &amp; Context Retrieval): built <b>MedMemGraph</b>, graph-native longitudinal memory for clinical AI agents — versioned fact graph, path-traversal retrieval, structural abstention. <a href="https://github.com/pbiyyani09/Hack_Hydra" style="text-decoration:underline">GitHub</a></li>
+    <li><b>Google 5-Day AI Agents Intensive 2026</b> — Capstone: <b>Cash-Flow Copilot</b> (co-built) — agentic CFO assistant with a deterministic numeric-provenance guard. <i>ADK, MCP, Gemini.</i></li>
+    <li><b>Mayo Clinic Datathon 2025</b> — <b>ARDS</b> (acute respiratory distress syndrome) clinical-ML project.</li>
+    <li><b>Hacklytics 2025 — Georgia Tech</b> — <b>MRI 2T→3T</b> cross-field-strength medical imaging (co-built). <a href="https://github.com/venkat1596/Hacklytics_Hackathon" style="text-decoration:underline">GitHub</a></li>
+  </ul>
+
+  <h2>Education</h2>
+  <div>
+    M.S. in Computer Science, Westcliff University, 2024<br>
+    M.S. in Civil Engineering, Florida State University, 2020<br>
+    B.Tech in Civil Engineering, Gokaraju Rangaraju College of Engineering, 2018
+  </div>
+
+  <h2>Certifications</h2>
+  <div>Anthropic (2026): Building with the Claude API · Model Context Protocol (Intro &amp; Advanced) · Claude Code in Action · Claude with Amazon Bedrock</div>
+</div>
+</body>
+</html>
